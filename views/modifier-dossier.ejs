@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier le dossier</title>
+    <link rel="stylesheet" href="/css/modifier-dossier.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Tableau de bord</a></li>
+            <li><a href="/patients">Patients</a></li>
+            <li><a href="/dossiers" class="active">Dossiers</a></li>
+            <li><a href="/examens">Examens</a></li>
+            <li><a href="/utilisateurs">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Modifier le dossier</h1>
+        
+        <!-- Formulaire pour modifier un dossier -->
+        <section class="form-section">
+            <form action="/modifier-dossier" method="POST">
+                <input type="hidden" name="id" value="<%= dossier.IdDossier %>">
+                
+                <div class="input-group">
+                    <label for="dateCreation">Date de création</label>
+                    <input type="date" id="dateCreation" name="dateCreation" value="<%= dossier.DateCreation %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="idPatient">Patient</label>
+                    <select id="idPatient" name="idPatient" required>
+                        <% patients.forEach(patient => { %>
+                            <option value="<%= patient.IdPatient %>" <%= dossier.IdPatient === patient.IdPatient ? 'selected' : '' %>><%= patient.Nom %> <%= patient.Prenom %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Mettre à jour</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

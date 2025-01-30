@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier l'utilisateur</title>
+    <link rel="stylesheet" href="/css/modifier-utilisateur.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Tableau de bord</a></li>
+            <li><a href="/patients">Patients</a></li>
+            <li><a href="/dossiers">Dossiers</a></li>
+            <li><a href="/examens">Examens</a></li>
+            <li><a href="/utilisateurs" class="active">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Modifier l'utilisateur</h1>
+        
+        <!-- Formulaire pour modifier un utilisateur -->
+        <section class="form-section">
+            <form action="/modifier-utilisateur" method="POST">
+                <input type="hidden" name="id" value="<%= utilisateur.IdUtilisateur %>">
+                
+                <div class="input-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" value="<%= utilisateur.Nom %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" value="<%= utilisateur.Prenom %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="login">Email</label>
+                    <input type="email" id="login" name="login" value="<%= utilisateur.Login %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Mettre à jour</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

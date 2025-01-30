@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des patients</title>
+    <link rel="stylesheet" href="/css/patients.css">
+    <style>
+        /* Navigation */
+        .navbar {
+            background-color: #333;
+            padding: 10px;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .navbar li {
+            display: inline-block;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            padding: 10px 20px;
+            display: block;
+        }
+
+        .navbar a:hover,
+        .navbar .active {
+            background-color: #575757;
+            border-radius: 4px;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #4CAF50;
+            color: rgb(2, 2, 2);
+        }
+
+        /* Form styles */
+        .form-section {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Button styles */
+        .btn-edit {
+            background-color: #007BFF;
+        }
+
+        .btn-edit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Accueil</a></li>
+            <li><a href="/patients" class="active">Patients</a></li>
+            <li><a href="/dossiers">Dossiers</a></li>
+            <li><a href="/examens">Examens</a></li>
+            <li><a href="/utilisateurs">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>Gestion des patients</h1>
+        
+        <!-- Formulaire pour ajouter un patient -->
+        <section class="form-section">
+            <h2>Ajouter un patient</h2>
+            <form action="/ajouter-patient" method="POST">
+                <div class="input-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="input-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                </div>
+                <div class="input-group">
+                    <label for="dateNaissance">Date de naissance</label>
+                    <input type="date" id="dateNaissance" name="dateNaissance" required>
+                </div>
+                <div class="input-group">
+                    <label for="telephone">Téléphone</label>
+                    <input type="text" id="telephone" name="telephone" required>
+                </div>
+                <div class="input-group">
+                    <label for="sexe">Sexe</label>
+                    <select id="sexe" name="sexe" required>
+                        <option value="">--------</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="nationalite">Nationalité</label>
+                    <input type="text" id="nationalite" name="nationalite">
+                </div>
+                <button type="submit" class="btn">Ajouter</button>
+            </form>
+        </section>
+
+        <!-- Liste des patients existants -->
+        <section class="patients-section">
+            <h2>Patients existants</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Date de naissance</th>
+                        <th>Téléphone</th>
+                        <th>Sexe</th>
+                        <th>Nationalité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% patients.forEach(patient => { %>
+                        <tr>
+                            <td><%= patient.Nom %></td>
+                            <td><%= patient.Prenom %></td>
+                            <td><%= patient.DateNaissance %></td>
+                            <td><%= patient.Telephone %></td>
+                            <td><%= patient.Sexe %></td>
+                            <td><%= patient.Nationalite %></td>
+                            <td>
+                                <form action="/modifier-patient/<%= patient.IdPatient %>" method="GET" style="display:inline;">
+                                    <button type="submit" class="btn btn-edit">Modifier</button>
+                                </form>
+                                <form action="/supprimer-patient" method="POST" style="display:inline;">
+                                    <input type="hidden" name="id" value="<%= patient.IdPatient %>">
+                                    <button type="submit" class="btn btn-delete">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        // JavaScript pour le menu de navigation
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.navbar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

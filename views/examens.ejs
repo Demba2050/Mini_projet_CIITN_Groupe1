@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des examens</title>
+    <link rel="stylesheet" href="/css/examens.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Accueil</a></li>
+            <li><a href="/patients">Patients</a></li>
+            <li><a href="/dossiers">Dossiers</a></li>
+            <li><a href="/examens" class="active">Examens</a></li>
+            <li><a href="/utilisateurs">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Gestion des examens</h1>
+        
+        <!-- Formulaire pour ajouter un examen -->
+        <section class="form-section">
+            <h2>Ajouter un examen</h2>
+            <form action="/ajouter-examen" method="POST">
+                <div class="input-group">
+                    <label for="nomExamen">Nom de l'examen</label>
+                    <input type="text" id="nomExamen" name="nomExamen" required>
+                </div>
+                <div class="input-group">
+                    <label for="dateResultat">Date du résultat</label>
+                    <input type="date" id="dateResultat" name="dateResultat" required>
+                </div>
+                <div class="input-group">
+                    <label for="resultat">Résultat</label>
+                    <input type="text" id="resultat" name="resultat" required>
+                </div>
+                <div class="input-group">
+                    <label for="idDossier">Dossier</label>
+                    <select id="idDossier" name="idDossier" required>
+                        <% if (dossiers && dossiers.length > 0) { %>
+                            <% dossiers.forEach(dossier => { %>
+                                <option value="<%= dossier.IdDossier %>">
+                                    <%= new Date(dossier.DateCreation).toLocaleDateString('fr-FR') %> - <%= dossier.IdPatient %>
+                                </option>
+                            <% }) %>
+                        <% } else { %>
+                            <option disabled>Aucun dossier disponible</option>
+                        <% } %>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Ajouter</button>
+            </form>
+        </section>
+
+        <!-- Liste des examens existants -->
+        <section class="examens-section">
+            <h2>Examens existants</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom de l'examen</th>
+                        <th>Date du résultat</th>
+                        <th>Résultat</th>
+                        <th>Dossier</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (examens && examens.length > 0) { %>
+                        <% examens.forEach(examen => { %>
+                            <tr>
+                                <td><%= examen.Nom %></td>
+                                <td><%= new Date(examen.DateResultat).toLocaleDateString('fr-FR') %></td>
+                                <td><%= examen.Resultats %></td>
+                                <td><%= examen.IdDossier %></td>
+                                <td>
+                                    <form action="/modifier-examen/<%= examen.IdExamen %>" method="GET" style="display:inline;">
+                                        <button type="submit" class="btn btn-edit">Modifier</button>
+                                    </form>
+                                    <form action="/supprimer-examen" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<%= examen.IdExamen %>">
+                                        <button type="submit" class="btn btn-delete">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6">Aucun examen disponible</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script>
+        // JavaScript pour le menu de navigation
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.navbar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

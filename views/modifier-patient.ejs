@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier le patient</title>
+    <link rel="stylesheet" href="/css/modifier-patient.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Accueil</a></li>
+            <li><a href="/patients" class="active">Patients</a></li>
+            <li><a href="/dossiers">Dossiers</a></li>
+            <li><a href="/examens">Examens</a></li>
+            <li><a href="/utilisateurs">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Modifier le patient</h1>
+        
+        <!-- Formulaire pour modifier un patient -->
+        <section class="form-section">
+            <form action="/modifier-patient" method="POST">
+                <input type="hidden" name="id" value="<%= patient.IdPatient %>">
+                
+                <div class="input-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" value="<%= patient.Nom %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" value="<%= patient.Prenom %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="dateNaissance">Date de naissance</label>
+                    <input type="date" id="dateNaissance" name="dateNaissance" value="<%= patient.DateNaissance %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="telephone">Téléphone</label>
+                    <input type="text" id="telephone" name="telephone" value="<%= patient.Telephone %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="sexe">Sexe</label>
+                    <select id="sexe" name="sexe">
+                        <option value="Homme" <%= patient.Sexe === 'Homme' ? 'selected' : '' %>>Homme</option>
+                        <option value="Femme" <%= patient.Sexe === 'Femme' ? 'selected' : '' %>>Femme</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="nationalite">Nationalité</label>
+                    <input type="text" id="nationalite" name="nationalite" value="<%= patient.Nationalite %>">
+                </div>
+                <button type="submit" class="btn">Mettre à jour</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>

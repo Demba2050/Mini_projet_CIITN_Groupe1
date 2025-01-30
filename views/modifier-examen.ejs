@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier l'examen</title>
+    <link rel="stylesheet" href="/css/modifier-examen.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Tableau de bord</a></li>
+            <li><a href="/patients">Patients</a></li>
+            <li><a href="/dossiers">Dossiers</a></li>
+            <li><a href="/examens" class="active">Examens</a></li>
+            <li><a href="/utilisateurs">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Modifier l'examen</h1>
+        
+        <!-- Formulaire pour modifier un examen -->
+        <section class="form-section">
+            <form action="/modifier-examen" method="POST">
+                <input type="hidden" name="id" value="<%= examen.IdExamen %>">
+                
+                <div class="input-group">
+                    <label for="nomExamen">Nom de l'examen</label>
+                    <input type="text" id="nomExamen" name="nomExamen" value="<%= examen.NomExamen %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="dateResultat">Date du résultat</label>
+                    <input type="date" id="dateResultat" name="dateResultat" value="<%= examen.DateResultat %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="resultat">Résultat</label>
+                    <input type="text" id="resultat" name="resultat" value="<%= examen.Resultat %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="idDossier">Dossier</label>
+                    <select id="idDossier" name="idDossier" required>
+                        <% dossiers.forEach(dossier => { %>
+                            <option value="<%= dossier.IdDossier %>" <%= examen.IdDossier === dossier.IdDossier ? 'selected' : '' %>><%= new Date(dossier.DateCreation).toLocaleDateString('fr-FR') %> - <%= dossier.IdPatient %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Mettre à jour</button>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+

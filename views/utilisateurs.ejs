@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des utilisateurs</title>
+    <link rel="stylesheet" href="/css/utilisateurs.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Tableau de bord</a></li>
+            <li><a href="/patients">Patients</a></li>
+            <li><a href="/dossiers">Dossiers</a></li>
+            <li><a href="/examens">Examens</a></li>
+            <li><a href="/utilisateurs" class="active">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Gestion des utilisateurs</h1>
+        
+        <!-- Formulaire pour ajouter un utilisateur -->
+        <section class="form-section">
+            <h2>Ajouter un utilisateur</h2>
+            <form action="/inscription" method="POST">
+                <div class="input-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" required>
+                </div>
+                <div class="input-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" required>
+                </div>
+                <div class="input-group">
+                    <label for="login">Email</label>
+                    <input type="email" id="login" name="login" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Ajouter</button>
+            </form>
+        </section>
+
+        <!-- Liste des utilisateurs existants -->
+        <section class="utilisateurs-section">
+            <h2>Utilisateurs existants</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (utilisateurs && utilisateurs.length > 0) { %>
+                        <% utilisateurs.forEach(utilisateur => { %>
+                            <tr>
+                                <td><%= utilisateur.Nom %></td>
+                                <td><%= utilisateur.Prenom %></td>
+                                <td><%= utilisateur.Login %></td>
+                                <td>
+                                    <form action="/modifier-utilisateur/<%= utilisateur.IdUtilisateur %>" method="GET" style="display:inline;">
+                                        <button type="submit" class="btn btn-edit">Modifier</button>
+                                    </form>
+                                    <form action="/supprimer-utilisateur" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<%= utilisateur.IdUtilisateur %>">
+                                        <button type="submit" class="btn btn-delete">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="4">Aucun utilisateur disponible</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link rel="stylesheet" href="/css/connexion.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Connexion</h2>
+        <form id="connexionForm" action="/connexion" method="POST">
+            <div class="input-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" name="login" required>
+                <span class="error" id="loginError"></span> <!-- Message d'erreur pour le login -->
+            </div>
+            <div class="input-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required>
+                <span class="error" id="passwordError"></span> <!-- Message d'erreur pour le mot de passe -->
+            </div>
+            <button type="submit" class="btn">Se connecter</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('connexionForm').addEventListener('submit', function(event) {
+            let valid = true;
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+            
+            // Réinitialiser les messages d'erreur
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+
+            // Validation des champs
+            if (login.trim() === '') {
+                document.getElementById('loginError').textContent = 'Le login est requis.';
+                valid = false;
+            }
+
+            if (password.trim() === '') {
+                document.getElementById('passwordError').textContent = 'Le mot de passe est requis.';
+                valid = false;
+            }
+
+            if (!valid) {
+                event.preventDefault(); // Empêche l'envoi du formulaire si les champs ne sont pas valides
+            }
+        });
+    </script>
+</body>
+</html>

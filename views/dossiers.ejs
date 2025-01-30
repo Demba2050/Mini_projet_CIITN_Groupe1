@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des dossiers</title>
+    <link rel="stylesheet" href="/css/dossiers.css">
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard">Accueil</a></li>
+            <li><a href="/patients">Patients</a></li>
+            <li><a href="/dossiers" class="active">Dossiers</a></li>
+            <li><a href="/examens">Examens</a></li>
+            <li><a href="/utilisateurs">Utilisateurs</a></li>
+            <li><a href="/deconnexion">Déconnexion</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Gestion des dossiers</h1>
+        
+        <!-- Formulaire pour ajouter un dossier -->
+        <section class="form-section">
+            <h2>Ajouter un dossier</h2>
+            <form action="/ajouter-dossier" method="POST">
+                <div class="input-group">
+                    <label for="dateCreation">Date de création</label>
+                    <input type="date" id="dateCreation" name="dateCreation" required>
+                </div>
+                <div class="input-group">
+                    <label for="idPatient">Patient</label>
+                    <select id="idPatient" name="idPatient" required>
+                        <% if (patients && patients.length > 0) { %>
+                            <% patients.forEach(patient => { %>
+                                <option value="<%= patient.IdPatient %>">
+                                    <%= patient.Prenom %> <%= patient.Nom %>
+                                </option>
+                            <% }) %>
+                        <% } else { %>
+                            <option disabled>Aucun patient disponible</option>
+                        <% } %>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Ajouter</button>
+            </form>
+        </section>
+
+        <!-- Liste des dossiers existants -->
+        <section class="dossiers-section">
+            <h2>Dossiers existants</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date de création</th>
+                        <th>Patient</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (dossiers && dossiers.length > 0) { %>
+                        <% dossiers.forEach(dossier => { %>
+                            <tr>
+                                <td><%= new Date(dossier.DateCreation).toLocaleDateString('fr-FR') %></td>
+                                <td>
+                                    <% 
+                                        const patient = patients.find(p => p.IdPatient === dossier.IdPatient);
+                                        if (patient) { 
+                                            %> <%= patient.Prenom %> <%= patient.Nom %> <% 
+                                        } else { 
+                                            %> Patient introuvable <% 
+                                        } 
+                                    %>
+                                </td>
+                                <td>
+                                    <form action="/modifier-dossier/<%= dossier.IdDossier %>" method="GET" style="display:inline;">
+                                        <button type="submit" class="btn btn-edit">Modifier</button>
+                                    </form>
+                                    <form action="/supprimer-dossier" method="POST" style="display:inline;">
+                                        <input type="hidden" name="id" value="<%= dossier.IdDossier %>">
+                                        <button type="submit" class="btn btn-delete">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="3">Aucun dossier disponible</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script>
+        // JavaScript pour le menu de navigation
+        document.querySelectorAll('.navbar a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.navbar a').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
